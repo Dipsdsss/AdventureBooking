@@ -1,0 +1,433 @@
+{% extends 'basic.html' %}
+{% block title %}Last Booking
+{% endblock title %}
+{% block head %}
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="assets/theme/css/style.css">
+    <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+
+{% endblock head %}
+{% block body %}
+    {% load static %}
+    {#        style for services#}
+    {#        /*Services*/#}
+    <Style>
+        .sec-services {
+        {#background: #f9f9f9;#} text-align: center;
+
+        }
+
+        .sec-services i {
+            display: block;
+            margin: auto;
+            width: 45px;
+        }
+
+        .sec-services .fa-paint-brush {
+            width: 64px;
+        }
+
+        .sec-services .fa-code {
+            width: 68px
+        }
+
+        .sec-services h2 {
+            margin: 1em 0;
+        }
+
+        {#for cards#}
+
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+
+        body {
+        {#background-color: rgba(115, 114, 114, 0.47);#} font-family: "Poppins", sans-serif;
+            font-weight: 300
+        }
+
+        .icon-box {
+            position: relative;
+            display: block;
+            padding: 40px 20px 30px;
+            -webkit-transition: all .25s cubic-bezier(.645, .045, .355, 1);
+            -o-transition: all .25s cubic-bezier(.645, .045, .355, 1);
+            transition: all .25s cubic-bezier(.645, .045, .355, 1);
+            border-radius: 5px;
+            z-index: 99;
+            text-decoration: none
+        }
+
+        .col-md-4 {
+            margin-top: 10px
+        }
+
+        .icon-box .icon {
+            margin-bottom: 24px
+        }
+
+        .icon-box:hover {
+            z-index: 1;
+            background-color: #fff;
+            -webkit-box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+            box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+            transform: translateY(-15px);
+        }
+
+        .icon-box .content .title.fz-20 {
+            font-size: 20px
+        }
+
+        a:hover {
+            text-decoration: none;
+
+        }
+
+        .icon-box .content .title {
+            font-size: 24px;
+            line-height: 1.5;
+            margin: 0;
+            color: #3f3a64
+        }
+
+        .icon-box .content .desc {
+            margin-top: 10px
+        }
+
+        .icon-box .content .desc p {
+            line-height: 1.6;
+            color: #696969
+        }
+
+        p:last-child {
+            margin-bottom: 0
+        }
+
+        .icon-box:hover .content .link {
+            color: #20ad96
+        }
+
+        .icon-box .content .link {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1;
+            display: -webkit-inline-box;
+            display: -ms-inline-flexbox;
+            display: inline-flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            margin-top: 34px;
+            padding: 5px 0;
+            color: #8c89a2
+        }
+
+        .icon-box .content .link i {
+            font-size: 16px;
+            line-height: 14px;
+            margin-left: 14px
+        }
+
+
+    </Style>
+
+
+
+    <!--Booking Section starts here-->
+    <section>
+        <div class="container-fluid py-5 px-5 ">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="row justify-content-center py-5 bg-light">
+                    <div class="col-lg-4">
+                        <label for="">Location</label>
+                        <select class="form-control" name="search_location" id="roomstatus">
+                            <!--Hotel id and location-->
+                            <option>Location</option>
+                            {% for each_location,each_hotel_id in all_location %}
+
+                                <option value={{ each_hotel_id }}>{{ each_location }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label for="">Adventure</label>
+                        <select class="form-control" name="type" id="type">
+                            <!--Hotel id and location-->
+
+                            <option value='1'>Hiking</option>
+                            <option value='2'>Climbing</option>
+                            <option value='3'>Caving</option>
+
+                        </select>
+                    </div>
+                    {% load app_tags %}
+
+                    <div class="col-lg-2">
+
+                        <input type="submit" value="Search" class="form-control mr-sm-2 btn btn-danger my-4"
+                               style="position: relative;top: 7px;">
+                    </div>
+
+
+                </div>
+            </form>
+
+        </div>
+    </section>
+    <!--Booking Section ends here-->
+    <!--Fetched reults appear here-->
+    <div class="container-fluid mx-aut0 " style="padding: 50px;">
+        {% if rooms %}
+            <h1 class="text-center text-danger p-3">Adventures Available</h1>
+            <table class="table table-striped">
+                <thead class="o thead-dark">
+                <th>Adventure</th>
+                <th>Service Type</th>
+                <th>Location</th>
+                <th>price</th>
+                <th>Action</th>
+                </thead>
+                {% for r in rooms %}
+                    <tr class="">
+                        <td>{{ r.get_adventure_type_display }}</td>
+                        <td>{{ r.get_room_type_display }}</td>
+                        <td>{{ r.hotel.location }}</td>
+                        <td>{{ r.price }}</td>
+
+                        <td><a href="/user/book-room?roomid={{ r.id }}">
+                            <button class="btn btn-dark text-light">Book Now</button>
+                        </a></td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        {% endif %}
+    </div>
+    <!--Fetched results ends here-->
+    {#     here starts the services section##}
+    <section id="services" class="sec-services bg-light">
+        <div class="container">
+            <h1 class="py-5"> Our Services</h1> <br>
+            <div class="row">
+                <div class="col-sm-4 p-2">
+                    <i class="fa fa-3x fa-book"></i>
+
+                    <h2 class="h4">Trip Planning</h2>
+
+                    <p>Planning services to help customers choose the right destination, itinerary, and activities based
+                        on their interests and budget.</p>
+                </div>
+
+                <div class="col-sm-4 p-2">
+                    <i class="fa fa-3x fa-calendar"></i>
+
+                    <h2 class="h4"> Booking/Reservations</h2>
+
+                    <p>Allow customers to book and reserve adventure travel experiences online, including activities,
+                        accommodations, transportation, and tours.</p>
+                </div>
+
+                <div class="col-sm-4 p-2">
+                    <i class="fa fa-3x fa-users"></i>
+
+                    <h2 class="h4"> Reviews and Ratings</h2>
+
+                    <p>Customers can read reviews and ratings from other travelers who have booked through the website,
+                        helping them make informed decisions about their travel plans.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    {#    <h3 class="text-center text-dark">Choose the Adventure</h3>#}
+
+    <!--Room tables starts here-->
+
+    {# for the animating text        #}
+    <h2 class="entry text-center pt-5" style="font-size: 250%;
+  font-weight: bold;
+    animation: blink 0.7s infinite;
+  width: auto; "></h2>
+    <div class="p-5">
+        <!--Grid row-->
+        <div class="row px-5">
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-in-left"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/021.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-out-up"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/022.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-in-right"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/023.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+            <!--Grid column-->
+        </div>
+        <!--Grid row-->
+
+        <!--Grid row-->
+        <div class="row px-5">
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-out-left"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/004.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-out-down"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/013.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <img
+                        data-mdb-toggle="animation"
+                        data-mdb-animation-start="onHover"
+                        data-mdb-animation="slide-out-right"
+                        data-mdb-animation-reset="true"
+                        src="https://mdbcdn.b-cdn.net/img/new/standard/nature/026.webp"
+                        class="img-fluid shadow-1-strong rounded"
+                />
+            </div>
+
+            <!--Grid column-->
+        </div>
+    </div>
+    {#  cards for options#}
+{#text with animations#}
+    <div class="container mt-5 mb-5">
+     <h2 class="entry1 text-center pt-4" style="font-size: 250%;
+  font-weight: bold; color: #ad0917;
+    animation: blink 0.7s infinite;
+  width: auto; "></h2>
+{#     <h1 class="text-center text-danger p-3">Adventures Options</h1>#}
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="col max-mb-30 aos-init aos-animate" data-aos="fade-up"><a href="#"
+                                                                                      class="icon-box text-center"
+                                                                                      data-bg-color="#fff"
+                                                                                      style="background-color: rgb(255, 255, 255);"
+                                                                                      data-abc="true">
+                    <div class="icon"><img src="https://i.imgur.com/CBU1h2t.png" width="240"></div>
+                    <div class="content">
+                        <h3 class="title fz-20">Hiking and Trekking</h3>
+                        <div class="desc">
+                            <p> Starts with $150/Day</p>
+                            <p>
+                                Day hikes, Multi-day treks, High-altitude treks, Backpacking, Hut-to-hut hiking</p>
+                        </div>
+                        <span class="link">Start here <i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a></div>
+            </div>
+            <div class="col-md-4">
+                <div class="col max-mb-30 aos-init aos-animate" data-aos="fade-up"><a href="#"
+                                                                                      class="icon-box text-center"
+                                                                                      data-bg-color="#fff"
+                                                                                      style="background-color: rgb(255, 255, 255);"
+                                                                                      data-abc="true">
+                    <div class="icon"><img src="https://i.imgur.com/Ckggrwe.png" width="220" alt=""></div>
+                    <div class="content">
+                        <h3 class="title fz-20">Climbing and Mountaineering
+                        </h3>
+                        <div class="desc">
+                            <p> Starts with $120/Day</p>
+                            <p> Rock climbing, Mountaineering expeditions, Ice climbing, Bouldering, Via Ferrata</p>
+                        </div>
+                        <span class="link">Start here <i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a></div>
+            </div>
+            <div class="col-md-4">
+                <div class="col max-mb-30 aos-init aos-animate" data-aos="fade-up"><a href="#"
+                                                                                      class="icon-box text-center"
+                                                                                      data-bg-color="#fff"
+                                                                                      style="background-color: rgb(255, 255, 255);"
+                                                                                      data-abc="true">
+                    <div class="icon"><img src="https://i.imgur.com/IUlCVE2.png" width="220" alt=""></div>
+                    <div class="content">
+                        <h3 class="title fz-20"> Caving </h3>
+                        <div class="desc">
+                            <p> Starts with $150/Day</p>
+
+                            <p>
+                                Guided cave tours ,Spelunking ,Vertical caving ,Wild caving ,Cave diving, Complimentary
+                                required instruments
+                            </p>
+                        </div>
+                        <span class="link">Start here <i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </a></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Grid row-->
+{% endblock body %}
+{% block js %}
+    <script>
+        document.addEventListener('DOMContentLoaded',
+            function () {
+                Typed.new('.entry', {
+                    strings: ["Are you Planning to go on Adventure?", "Do you feel like taking break?", "Don't stop! keep going.", "We will get you there.","Are you Planning to go on Adventure?", "Do you feel like taking break?", "Don't stop! keep going.", "We will get you there."],
+                    typeSpeed: 0.75
+                });
+            });
+document.addEventListener('DOMContentLoaded',
+            function () {
+                Typed.new('.entry1', {
+                    strings: ["Join Us Today!", "Try New Adventures with Us!", "Join Us Today!", "Try New Adventures with Us!","Join Us Today!", "Try New Adventures with Us!", "Join Us Today!", "Try New Adventures with Us!"],
+                    typeSpeed: 0.75
+                });
+            });
+
+    </script>
+{% endblock js %}
+   

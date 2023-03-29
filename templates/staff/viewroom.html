@@ -1,0 +1,53 @@
+ {% extends 'basic.html' %} {% block title %}View Room {% endblock title %} {% block body %}
+    <style>
+    .carousel{
+      display: none;
+  }
+    </style>
+
+       {% block carousel %}
+       <div class="carousel"></div>
+       {% endblock carousel %}
+
+<h2 class="text-success text-center p-5 text-dark"> Details</h2>
+
+<div class="container card mx-6 p-5 bg-light">
+    <p><b>Room No :-</b> {{room.roomnumber}}</p>
+    <p><b>Service :-</b> {{room.get_room_type_display}}</p>
+    <p><b>Adventure :-</b>{{room.get_adventure_type_display}}</p>
+    <p><b>Capacity :-</b> {{room.capacity}} person</p>
+    <p><b>Size :-</b> {{room.size}} ft</p>
+    <p><b>Status :-</b> {{room.get_status_display| capfirst}} </p>
+    <p><b>City :-</b> {{room.hotel.location| capfirst}} </p>
+    <p><b>State :-</b> {{room.hotel.state| capfirst}} </p>
+    <p><b>Country :-</b> {{room.hotel.country| capfirst}} </p>
+</div>
+
+    {% if reservations %}
+<h3 class="text-success text-center text-dark p-5">Bookings</h3>
+        <div class="p-5">
+<table class="table p-5 ">
+    <thead class="thead-dark">
+        <th>Username</th>
+        <th>Adventure</th>
+        <th>Capacity</th>
+        <th>check in</th>
+        <th>check out</th>
+    </thead>
+    {% for each_detail in reservations %}
+    <tr>
+        <td>{{each_detail.guest.username}}</td>
+        <td>{{each_detail.room.get_adventure_type_display}}</td>
+        <td>{{each_detail.room.capacity}}</td>
+        <td>{{each_detail.check_in}}</td>
+        <td>{{each_detail.check_out}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td><b>Total bookings = </b>{{reservations | length}}</td>
+    </tr>
+
+</table></div>
+{% else %}
+<p>No details found</p>
+{% endif %} {% endblock body %}
